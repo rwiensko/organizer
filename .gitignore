@@ -3,6 +3,8 @@
 .idea/
 *.iml
 *.iws
-
+*.db
+*.jar
+out/
 log/
 target/
