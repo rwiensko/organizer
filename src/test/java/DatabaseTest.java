@@ -1,3 +1,4 @@
+import org.junit.Before;
 import resources.DatabaseClass;
 import resources.Event;
 import org.junit.Test;
@@ -11,9 +12,13 @@ import java.util.ArrayList;
 
 public class DatabaseTest {
     private DatabaseClass db = new DatabaseClass("test");
+
+    @Before
+    public void beforeTest(){
+        db.deleteAllEvents();
+    }
     @Test
     public void testInsertAndDeleteEvent() {
-        db.deleteAllEvents();
         ArrayList<Event> arrayList = new ArrayList<>();
         Event event = new Event("Hello", ZonedDateTime.now());
         db.insertEvent(event);
@@ -23,7 +28,6 @@ public class DatabaseTest {
     }
     @Test
     public void testUpdateEvent() {
-        db.deleteAllEvents();
         Event event = new Event();
         db.insertEvent(event);
         db.updateEvent(event.getId(), "UPDATE");
@@ -32,7 +36,6 @@ public class DatabaseTest {
 
     @Test
     public void testSelectEventsFromOneDay(){
-        db.deleteAllEvents();
         ArrayList<Event> arrayOfEvents = new ArrayList<>();
         for(int i=0; i<10;i++){
             Event event = new Event("day",ZonedDateTime.of(LocalDate.now(), LocalTime.of(i,i), ZoneId.systemDefault()));
