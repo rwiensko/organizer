@@ -1,4 +1,4 @@
-package resources;
+package com.rwiensko.organizer.entity;
 
 import java.time.ZonedDateTime;
 

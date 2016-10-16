@@ -1,4 +1,4 @@
-package sample;
+package com.rwiensko.organizer.controller;
 
 import com.sun.javafx.scene.control.skin.DatePickerSkin;
 import javafx.collections.FXCollections;
@@ -20,8 +20,8 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.stream.Collectors;
-import resources.DatabaseClass;
-import resources.Event;
+import com.rwiensko.organizer.persistance.DatabaseClass;
+import com.rwiensko.organizer.entity.Event;
 
 
 public class Controller {

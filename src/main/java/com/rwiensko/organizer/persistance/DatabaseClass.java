@@ -1,4 +1,6 @@
-package resources;
+package com.rwiensko.organizer.persistance;
+
+import com.rwiensko.organizer.entity.Event;
 
 import java.sql.*;
 import java.sql.Connection;
@@ -18,7 +20,7 @@ public class DatabaseClass {
     private static final String DRIVER = "org.sqlite.JDBC";
     private Connection connection;
     private String databaseName;
-    public DatabaseClass(String baseName) {
+    public DatabaseClass(String fileName) {
 
         try {
             Class.forName(DatabaseClass.DRIVER);
@@ -27,8 +29,8 @@ public class DatabaseClass {
             e.printStackTrace();
         }
         try {
-            this.databaseName = "jdbc:sqlite:"+baseName+".db";
-            connection = DriverManager.getConnection(databaseName);
+            this.databaseName = "jdbc:sqlite:" + fileName + ".db";
+            connection = DriverManager.getConnection(this.databaseName);
 
         } catch(SQLException e) {
             System.err.println("Error server connection");

@@ -1,10 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<GridPane alignment="CENTER" hgap="10.0" prefHeight="676.0" prefWidth="714.0" vgap="10.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/2.2" fx:controller="sample.Controller">
+<GridPane alignment="CENTER" hgap="10.0" prefHeight="676.0" prefWidth="714.0" vgap="10.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/2.2" fx:controller="com.rwiensko.organizer.controller.Controller">
   <columnConstraints>
     <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" />
   </columnConstraints>
@@ -37,6 +36,6 @@
     </MenuBar>
     <BorderPane fx:id="borderPane" layoutX="14.0" layoutY="35.0" onMouseClicked="#selectEventsFromOneDay" prefHeight="200.0" prefWidth="686.0" />
     <TextArea fx:id="workingArea" layoutX="14.0" layoutY="524.0" prefHeight="63.0" prefWidth="686.0000999999975" wrapText="true" />
-    <Button fx:id="saveChanges" layoutX="14.0" layoutY="595.0" mnemonicParsing="false" onMouseClicked="#saveChanges" text="Save Changes" />
+    <Button layoutX="14.0" layoutY="595.0" mnemonicParsing="false" onMouseClicked="#saveChanges" text="Save Changes" />
   </AnchorPane>
 </GridPane>

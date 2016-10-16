@@ -1,6 +1,8 @@
+package com.rwiensko.organizer.persistance;
+
 import org.junit.Before;
-import resources.DatabaseClass;
-import resources.Event;
+import com.rwiensko.organizer.persistance.DatabaseClass;
+import com.rwiensko.organizer.entity.Event;
 import org.junit.Test;
 import junit.framework.Assert;
 
@@ -17,6 +19,7 @@ public class DatabaseTest {
     public void beforeTest(){
         db.deleteAllEvents();
     }
+
     @Test
     public void testInsertAndDeleteEvent() {
         ArrayList<Event> arrayList = new ArrayList<>();
@@ -26,6 +29,7 @@ public class DatabaseTest {
         db.deleteEventById(event.getId());
         Assert.assertEquals(arrayList, db.selectAllEvents());
     }
+
     @Test
     public void testUpdateEvent() {
         Event event = new Event();
