@@ -53,9 +53,9 @@ public class Event {
 
         Event event = (Event) o;
 
-        return getId() == event.getId() && !(getZonedDateTime() != null ? !getZonedDateTime().equals(event.getZonedDateTime()) : event.getZonedDateTime() != null) &&
-                !(getDescription() != null ? !getDescription().equals(event.getDescription()) : event.getDescription() != null);
-
+        boolean b = getId() == event.getId() && !(getZonedDateTime() != null ? !getZonedDateTime().equals(event.getZonedDateTime()) : event.getZonedDateTime() != null) &&
+                !(getDescription() != null ? !getDescription().equals(event.getDescription()) : event.description != null);
+        return b;
     }
 
     @Override

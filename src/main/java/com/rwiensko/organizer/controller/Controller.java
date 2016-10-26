@@ -15,21 +15,22 @@ import javafx.scene.text.TextAlignment;
 import javafx.stage.Stage;
 import java.io.IOException;
 import java.time.*;
+import java.util.Collections;
 import java.util.Date;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.stream.Collectors;
-import com.rwiensko.organizer.persistance.DatabaseClass;
+import com.rwiensko.organizer.persistance.Persister;
 import com.rwiensko.organizer.entity.Event;
 
 
 public class Controller {
 
-    private DatabaseClass databaseClass = new DatabaseClass("organiser");
-    private ObservableList<Event> items = FXCollections.observableArrayList();
-    private SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd, HH:mm");
-    Date date;
+    private final Persister databaseClass = new Persister("organiser");
+    private final ObservableList<Event> items = FXCollections.observableArrayList();
+    private final SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd, HH:mm");
+    private Date date;
     @FXML
     public TextField descriptionField;
     @FXML
@@ -44,7 +45,7 @@ public class Controller {
     public BorderPane borderPane;
     @FXML
     public TextArea workingArea;
-    public DatePicker datePicker = new DatePicker(LocalDate.now());
+    private final DatePicker datePicker = new DatePicker(LocalDate.now());
 
 
 
@@ -109,34 +110,35 @@ public class Controller {
     @FXML
     public void quit() {
         databaseClass.closeDatabaseConnection();
-        Runtime.getRuntime().exit(0);
+        System.exit(0);
     }
 
     @FXML
-    public void setBorderPane(){
+    public void setCalendarToBorderPane(){
         DatePickerSkin datePickerSkin = new DatePickerSkin(datePicker);
         borderPane.setCenter(datePickerSkin.getPopupContent());
-
     }
+
+    private Event[] setListViewWithEvent(LocalDate localDate){
+        Event [] tableOfEvents = new Event[24];
+        for(int i =0;i<24;i++){
+            Event event = new Event(" ",ZonedDateTime.of(localDate, LocalTime.of(i, 0), ZoneId.systemDefault()));
+            tableOfEvents[i] = event;
+        }
+        return tableOfEvents;
+    }
+
     @FXML
     public void selectEventsFromOneDay(){
         listView.getItems().clear();
         ZonedDateTime zonedDateTime = ZonedDateTime.of(datePicker.getValue(), LocalTime.MIN, ZoneId.systemDefault());
-        Event [] tableOfEvents = new Event[24];
-        ArrayList<Event> arrayOfEvents = new ArrayList<>();
-        arrayOfEvents = databaseClass.selectEventsFromOneDay(zonedDateTime);
-        for(int i =0;i<24;i++){
-            Event event = new Event(" ",ZonedDateTime.of(datePicker.getValue(), LocalTime.of(i, 0), ZoneId.systemDefault()));
-            tableOfEvents[i] = event;
+        Event [] tableOfEvents = setListViewWithEvent(datePicker.getValue());
+        ArrayList<Event> arrayOfEvents = databaseClass.selectEventsFromOneDay(zonedDateTime);
+        for (Event arrayOfEvent : arrayOfEvents) {
+            tableOfEvents[arrayOfEvent.getZonedDateTime().getHour()] = arrayOfEvent;
         }
-        for(int i=0;i<arrayOfEvents.size();i++){
-            tableOfEvents[arrayOfEvents.get(i).getZonedDateTime().getHour()] = arrayOfEvents.get(i);
-        }
-        for(Event event : tableOfEvents){
-            items.add(event);
-        }
+        Collections.addAll(items, tableOfEvents);
         listView.setItems(items);
-
     }
 
     @FXML
@@ -159,8 +161,9 @@ public class Controller {
 
     @FXML
     public void updateEvent(String description){
-        int id = listView.getSelectionModel().getSelectedItem().getId();
-        listView.getSelectionModel().getSelectedItem().setDescription(databaseClass.updateEvent(id, description));
+        Event event = listView.getSelectionModel().getSelectedItem();
+        event.setDescription(description);
+        listView.getSelectionModel().getSelectedItem().setDescription(databaseClass.updateEvent(event));
         selectEventsFromOneDay();
     }
 
@@ -173,18 +176,18 @@ public class Controller {
     @FXML
     public void saveChanges(){
         String description = workingArea.getText();
-        int id = listView.getSelectionModel().getSelectedItem().getId();
-        if(id==0){
+        Event event = listView.getSelectionModel().getSelectedItem();
+        if(event.getId()==0) {
             databaseClass.insertEvent(new Event(description,listView.getSelectionModel().getSelectedItem().getZonedDateTime()));
-        }else{
-            databaseClass.updateEvent(id,description);
+        } else {
+            databaseClass.updateEvent(event);
         }
         selectEventsFromOneDay();
     }
 
     @FXML
     public void initialize(){
-        setBorderPane();
+        setCalendarToBorderPane();
     }
 
 }
